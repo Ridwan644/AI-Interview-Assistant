@@ -18,3 +18,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # 4. The base — your models will inherit from this
 Base = declarative_base()
+
+def get_db():
+    db = SessionLocal() #open a database session
+    try:
+        yield db    #hand the session to the endpoint, then pause
+    finally:
+        db.close()  #when the endpoint is done, resume and close it 

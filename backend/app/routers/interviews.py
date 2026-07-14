@@ -28,3 +28,32 @@ def create_interview(interview: InterviewCreate, db: Session = Depends(get_db)):
     
     db.refresh(new_interview)
     return new_interview
+
+#def get_learn_topics(db: Session = Depends(get_db)): 
+
+'''
+response_model = list[InterviewResponse]
+This tells FastAPI what shape the response should be, and it does two jobs:
+InterviewReeponse: The schema defining what one interview looks like when sent back as JSON
+(id,user_id,interview_type,status,started_at)
+list[..]The response is a lsit of those 
+#because Get/Interviews returns many interviews 
+'''
+
+'''
+db.query(MockInterview).all() 
+db - your database session (the connection to talk to Postgres, from get_db) 
+.query(MockInterview) I want to query the MockInterview table 
+.all() give me ALL the rows. IT returns every row in the table 
+
+So the whole line means Using my database session, get all rows from the mock_interviews table. 
+It returns a list of MockInterview objects 
+One object per row 
+So if you have 3 interviews in the table, this returns a list of 3 MockInterview objects each with its id, user_id, and interview)type 
+'''
+
+
+@router.get("/interviews", response_model=list[InterviewResponse])
+def get_interviews(db: Session = Depends(get_db)):
+    interviews = db.query(MockInterview).all()
+    return interviews 

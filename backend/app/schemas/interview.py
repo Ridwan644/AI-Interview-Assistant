@@ -8,6 +8,7 @@ class InterviewResponse(BaseModel):
     user_id: int
     interview_type: str
     status: str
-    started_at: datetime 
+    started_at: datetime
+    ended_at: datetime | None = None
     class Config:
         from_attributes = True

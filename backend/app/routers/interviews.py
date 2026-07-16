@@ -1,5 +1,6 @@
 
-from fastapi import APIRouter, Depends
+from datetime import datetime, timezone
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.interview import MockInterview
@@ -56,4 +57,18 @@ So if you have 3 interviews in the table, this returns a list of 3 MockInterview
 @router.get("/interviews", response_model=list[InterviewResponse])
 def get_interviews(db: Session = Depends(get_db)):
     interviews = db.query(MockInterview).all()
-    return interviews 
+    return interviews
+
+@router.patch("/interviews/{interview_id}", response_model=InterviewResponse)
+def end_interview(interview_id: int, db: Session = Depends(get_db)):
+    interview = db.query(MockInterview).filter(MockInterview.id == interview_id).first()
+
+    if interview is None:
+        raise HTTPException(status_code=404, detail="Interview not found")
+
+    interview.status = "completed"
+    interview.ended_at = datetime.now(timezone.utc)
+
+    db.commit()
+    db.refresh(interview)
+    return interview

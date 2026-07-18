@@ -9,10 +9,10 @@ class User(Base):
     
     clerk_user_id = Column(String(250), index = True, unique = True, nullable = False)
     
-    name = Column(String(100), nullable = False)
-    major = Column(String(100), nullable = False)
-    target_role = Column(String(100),  nullable = False)
-    target_company = Column(String(250), nullable = False)
+    name = Column(String(100), nullable = True)
+    major = Column(String(100), nullable = True)
+    target_role = Column(String(100),  nullable = True)
+    target_company = Column(String(250), nullable = True)
 
     #timestamp 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
